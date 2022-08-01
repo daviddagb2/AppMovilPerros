@@ -1,8 +1,11 @@
 package com.dgb.appperros
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dgb.appperros.Adapters.PerroAdapter
@@ -12,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     //show error
                     showError()
                 }
+                hideKeyboard()
             }
         }
     }
@@ -58,6 +63,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private fun showError() {
         Toast.makeText(this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
     }
+
 
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
@@ -75,5 +81,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String?): Boolean {
         return true
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.viewRoot.windowToken, 0)
     }
 }
